@@ -3,22 +3,22 @@
 
 const canvas = document.getElementById("main-canvas");
 const context = canvas.getContext("2d");
+let takenPixels;
 let width;
 let height;
-const pixelWidth = 10;
-const pixelHeight = 10;
-
+const pixelWidth = 7;
+const pixelHeight = 7;
 
 const initialization = () => {
     canvas.addEventListener("click", clickHandler);
 };
 
 const clickHandler = (event) => {
-    const xValue = Math.floor(event.offsetX / 10) * 10;
-    const yValue = Math.floor(event.offsetY / 10) * 10;
-    const hex = window.prompt("hex", "000000");
-    console.log(xValue);
+    const xValue = Math.floor(event.offsetX / pixelWidth);
+    const yValue = Math.floor(event.offsetY / pixelHeight);
+    const hex = window.prompt("hex", "FFFFFF");
     submitPixel(xValue, yValue, hex);
+    drawOnPixel(xValue, yValue, true, hex);
 };
 
 const submitPixel = (x, y, hex) => {
@@ -42,13 +42,18 @@ const getExistingPixels = (canvasCallback, pixelsCallback) => {
     fetch('/pixel/', options)
         .then(data => data.json()
             .then(json => {
-                canvasCallback(json.canvas);
-                pixelsCallback(json.pixels);
+                if (canvasCallback) {
+                    canvasCallback(json.canvas);
+                }
+                if (pixelsCallback) {
+                    pixelsCallback(json.pixels);
+                }
             }));
 };
 
 const drawOnPixel = (x, y, fill, hex) => {
     if (!fill) {
+        context.lineWidth = 0.2;
         context.rect(pixelWidth * x, pixelHeight * y, pixelWidth, pixelHeight);
     } else if (hex) {
         context.fillStyle = hex;
@@ -73,7 +78,6 @@ const drawExistingPixels = (pixels) => {
     pixels.map(pixel => {
         drawOnPixel(pixel.x, pixel.y, true, pixel.hex);
     });
-    context.stroke();
 };
 
 (function() {
