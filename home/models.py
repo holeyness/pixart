@@ -1,3 +1,7 @@
 from django.db import models
 
-# Create your models here.
+
+class Pixel(models.Model):
+    x_coord = models.IntegerField()
+    y_coord = models.IntegerField()
+    hex = models.TextField()

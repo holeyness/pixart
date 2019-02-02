@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from home.views import home
+from home.views import home, pixel
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('pixel/', pixel),
     path('', home)
 ]
