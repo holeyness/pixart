@@ -6,8 +6,8 @@ from django.shortcuts import render
 from home.models import Pixel
 
 
-CANVAS_DEFAULT_WIDTH = 500
-CANVAS_DEFAULT_HEIGHT = 500
+CANVAS_DEFAULT_WIDTH = 250
+CANVAS_DEFAULT_HEIGHT = 250
 
 
 def home(request):
@@ -31,7 +31,7 @@ def pixel(request):
         })
     elif request.method == 'POST':
         # Get x, y, hex from POST and save
-        x_coord = int(request.POST.get('x'))
+        x_coord = int(request.body.get('x'))
         y_coord = int(request.POST.get('y'))
         hex = request.POST.get('hex')
 

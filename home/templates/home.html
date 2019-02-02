@@ -2,9 +2,16 @@
 
 <html>
 <head>
-    <script type="text/javascript" src="{% static "home.js" %}"></script>
+    <link rel="stylesheet" href="{% static "styles.css" %}">
+
+    <script>
+        window.csrfToken = '{{ csrf_token }}';
+    </script>
 </head>
 <body>
-Hello world
+    <div class="container">
+        <canvas width="2500px" height="2500px" id="main-canvas"></canvas>
+    </div>
+    <script type="text/javascript" src="{% static "home.js" %}"></script>
 </body>
 </html>
