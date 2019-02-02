@@ -6,6 +6,10 @@ from django.shortcuts import render
 from home.models import Pixel
 
 
+CANVAS_DEFAULT_WIDTH = 500
+CANVAS_DEFAULT_HEIGHT = 500
+
+
 def home(request):
     return render(request, 'home.html')
 
@@ -15,6 +19,10 @@ def pixel(request):
         # Return JSON list of x,y,hex
         pixels = Pixel.objects.all()
         return JsonResponse({
+            'canvas': {
+                'width': CANVAS_DEFAULT_WIDTH,
+                'height': CANVAS_DEFAULT_HEIGHT
+            },
             'pixels': [{
                 'x': p.x_coord,
                 'y': p.y_coord,
@@ -30,6 +38,17 @@ def pixel(request):
         if len(hex) != 6:
             return HttpResponseBadRequest(content=json.dumps({
                 'error': 'Invalid hex length'
+            }), content_type='application/json')
+
+        bad_coord = False
+        if x_coord < 0 or x_coord >= CANVAS_DEFAULT_WIDTH:
+            bad_coord = True
+        if y_coord < 0 or y_coord >= CANVAS_DEFAULT_HEIGHT:
+            bad_coord = True
+
+        if bad_coord:
+            return HttpResponseBadRequest(content=json.dumps({
+                'error': 'Invalid coordinates outside bounds'
             }), content_type='application/json')
 
         try:
