@@ -3,6 +3,9 @@ import os
 import sys
 
 if __name__ == '__main__':
+    from dotenv import load_dotenv, find_dotenv
+    load_dotenv(find_dotenv())
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pixart.settings')
     try:
         from django.core.management import execute_from_command_line
