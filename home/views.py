@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render
 
@@ -26,11 +28,15 @@ def pixel(request):
         hex = request.POST.get('hex')
 
         if len(hex) != 6:
-            return HttpResponseBadRequest('Invalid hex length')
+            return HttpResponseBadRequest(content=json.dumps({
+                'error': 'Invalid hex length'
+            }), content_type='application/json')
 
         try:
             Pixel.objects.get(x_coord=x_coord, y_coord=y_coord)
-            return HttpResponseBadRequest('That pixel has already been filled')
+            return HttpResponseBadRequest(content=json.dumps({
+                'error': 'That pixel has already been filled'
+            }), content_type='application/json')
         except Pixel.DoesNotExist:
             Pixel.objects.create(x_coord=x_coord, y_coord=y_coord, hex=hex)
             return JsonResponse({
